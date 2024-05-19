@@ -68,7 +68,7 @@ async function createGitCommit() {
     const file = await inquirer.prompt({
       name: "file_location",
       type: "list",
-      message: "Which file(s) should be committed?",
+      message: "Which file should be committed?",
       choices: files,
     });
 
