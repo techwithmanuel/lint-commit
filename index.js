@@ -4,6 +4,7 @@ import chalk from "chalk";
 import inquirer from "inquirer";
 import { createSpinner } from "nanospinner";
 import { exec } from "child_process";
+import { checkGitStatus } from "./changed-files.js";
 
 const sleep = (ms = 1000) => new Promise((r) => setTimeout(r, ms));
 
@@ -28,6 +29,7 @@ function execute(command) {
 }
 
 async function createGitCommit() {
+  const files = checkGitStatus();
   try {
     console.log(chalk.green("✨ Initialized CLI"));
 
@@ -63,11 +65,9 @@ async function createGitCommit() {
 
     const file = await inquirer.prompt({
       name: "file_location",
-      type: "input",
+      type: "list",
       message: "Which file(s) should be committed?",
-      default() {
-        return "src";
-      },
+      choices: files,
     });
 
     await execute(`git add ${file.file_location}`);
