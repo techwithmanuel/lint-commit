@@ -38,7 +38,7 @@ async function createGitCommit() {
     const initGit = await inquirer.prompt({
       name: "git_initialized",
       type: "list",
-      message: "Have you initialized a git repository?",
+      message: "Have you initialized a git repository ?",
       choices: ["Yes", "No"],
     });
 
@@ -54,7 +54,7 @@ async function createGitCommit() {
       const repoVisibility = await inquirer.prompt({
         name: "repo_visibility",
         type: "list",
-        message: "Do you want the repository to be public or private?",
+        message: "Do you want the repository to be public or private ?",
         choices: ["Public", "Private"],
       });
 
@@ -68,7 +68,7 @@ async function createGitCommit() {
     const file = await inquirer.prompt({
       name: "file_location",
       type: "list",
-      message: "Which file should be committed?",
+      message: "Which file should be committed ?",
       choices: files,
     });
 
