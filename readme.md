@@ -1,31 +1,39 @@
-# Lint Commit
+# TechWithManuel Git Commit Automation CLI
 
-A basic command line tool for creating commit messages that follow the [commitlint](https://commitlint.js.org/) convention. This tool helps streamline the process of writing commit messages by guiding the user through a series of prompts.
+## Description
+
+This CLI tool helps automate the process of generating commit messages and managing a Git repository. It guides the user through initializing a Git repository (if not already initialized), selecting files to commit, generating AI-assisted commit messages, and optionally pushing changes to a remote repository.
 
 ## Features
 
-- Initializes a git repository if one isn't already present.
-- Creates a new GitHub repository if needed.
-- Adds specified files to the staging area.
-- Prompts for commit message type and content.
-- Commits changes with a properly formatted commit message.
-- Provides feedback on the commit process.
+- Initialize a new Git repository if not already initialized
+- Select files to commit from the list of changed files
+- Generate AI-assisted commit messages using the Google Generative AI API
+- Optionally push changes to the remote repository
 
 ## Prerequisites
 
-- [Node.js](https://nodejs.org/) installed on your machine.
-- [Git](https://git-scm.com/) installed and configured.
-- [GitHub CLI (gh)](https://cli.github.com/) installed and authenticated.
+- Node.js (v14.x or later)
+- Git installed on your system
+- GitHub CLI (`gh`) installed
+- Google Generative AI API key
 
 ## Installation
 
-You can use this tool without installation via `npx`:
+#### 1. Set up environment variables:
+   Create a `.env` file in the root directory and add your Google Generative AI API key:
+
+```bash
+GEMINI_API_KEY=your_gemini_api_key
+```
+
+#### 2. You can use this tool without installation via `npx`:
 
 ```bash
 npx lint-commit
 ```
 
-Alternatively, you can clone this repository and run the script locally:
+#### 3. Alternatively, you can clone this repository and run the script locally:
 
 ```bash
 git clone https://github.com/techwithmanuel/lint-commit.git
@@ -43,18 +51,6 @@ npx lint-commit
 ```
 
 Follow the prompts to initialize a git repository, add files, and create a commit with a commitlint-conformant message.
-
-### Examples
-
-#### Initializing a Git Repository and Committing Changes
-
-1. Run npx lint-commit.
-2. If prompted, choose to initialize a new git repository.
-3. Enter the repository name and select visibility (public or private).
-4. Specify the files to commit (default is src).
-5. Select the type of commit message (e.g., feat, fix, docs, etc.).
-6. Enter a commit message.
-7. The tool will add the files, create a commit, and display a success message.
 
 ### Contributing
 
