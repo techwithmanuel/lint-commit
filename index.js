@@ -89,16 +89,8 @@ async function createGitCommit() {
       await execute(`git commit -m "${AIGeneratedCommitMessage}}"`);
 
       spinner.success({
-        text: `✨ Commit "${AIGeneratedCommitMessage}" generated successfully`,
+        text: "✨ Commit created successfully",
       });
-
-      console.log(
-        `Run ${chalk.cyan(
-          "git push"
-        )} to push the commits to the remote repository`
-      );
-    } else {
-      throw new Error("An error occured");
     }
   } catch (error) {
     console.error(
@@ -107,4 +99,4 @@ async function createGitCommit() {
   }
 }
 
-createGitCommit();
+await createGitCommit();
