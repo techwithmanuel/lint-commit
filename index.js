@@ -100,6 +100,29 @@ async function createGitCommit() {
     console.error(
       chalk.red(`Failed to complete the operation: ${error.message}`)
     );
+    process.exit(1);
+  }
+
+  const pushInit = await inquirer.prompt({
+    name: "value",
+    type: "list",
+    message: "Would you like to push to your remote repository ?",
+    choices: ["Yes", "No"],
+  });
+
+  if (pushInit.value === "Yes") {
+    const spinner = createSpinner("Generating Commit Message...").start();
+
+    await sleep(1000);
+    await execute("git push");
+
+    spinner.success({
+      text: "Pushed successfully",
+    });
+  } else if (pushInit.value === "No") {
+    console.log(
+      `😅 No problems, run ${chalk.cyan("git push")} to push to your repository`
+    );
   }
 }
 
