@@ -1,6 +1,6 @@
 {
   "name": "lint-commit",
-  "version": "0.0.12",
+  "version": "0.0.15",
   "description": "Basic command line tool for writing commit files with the commitlint convention",
   "main": "index.js",
   "type": "module",
@@ -16,7 +16,11 @@
     "commit",
     "tool",
     "javascript",
-    "node"
+    "node",
+    "ai",
+    "gpt",
+    "gemini",
+    "automation"
   ],
   "author": "Emmanuel Alozie",
   "license": "ISC",
