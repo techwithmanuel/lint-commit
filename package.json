@@ -1,12 +1,12 @@
 {
   "name": "lint-commit",
-  "version": "0.0.1",
+  "version": "0.0.11",
   "description": "Basic command line tool for writing commit files with the commitlint convention",
   "main": "index.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "node index.js"
+    "start": "node index.js"
   },
   "bin": "./index.js",
   "keywords": [
