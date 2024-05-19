@@ -90,7 +90,7 @@ async function createGitCommit() {
         await execute(`git commit -m "${AIGeneratedCommitMessage}}"`);
 
         spinner.success({
-          text: "✨ Commit created successfully",
+          text: `✨ Commit ${AIGeneratedCommitMessage} generated successfully`,
         });
       } catch (error) {
         throw new Error(error);
