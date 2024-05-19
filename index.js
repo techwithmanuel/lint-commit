@@ -8,18 +8,22 @@ import { exec } from "child_process";
 const sleep = (ms = 1000) => new Promise((r) => setTimeout(r, ms));
 
 function execute(command) {
-  exec(command, async (error, stdout, stderr) => {
-    if (error) {
-      console.error(`Error executing command: ${error.message}`);
-      return;
-    }
+  return new Promise((resolve, reject) => {
+    exec(command, (error, stdout, stderr) => {
+      if (error) {
+        console.error(chalk.red(`Error executing command: ${error.message}`));
+        reject(error);
+        return;
+      }
 
-    if (stderr) {
-      consol.error(`Error in command output: ${stderr}`);
-      return;
-    }
+      if (stderr) {
+        console.error(chalk.red(`Error in command output: ${stderr}`));
+        reject(new Error(stderr));
+        return;
+      }
 
-    return;
+      resolve(stdout);
+    });
   });
 }
 
@@ -29,19 +33,37 @@ async function createGitCommit() {
   const initGit = await inquirer.prompt({
     name: "git_initialized",
     type: "list",
-    message: "Have you initialized a git repository",
+    message: "Have you initialized a git repository?",
     choices: ["Yes", "No"],
   });
 
-  if (initGit.git_initialized === "Yes") {
-  } else if (initGit.git_initialized === "No") {
+  if (initGit.git_initialized === "No") {
     await execute("git init");
+
+    const repoName = await inquirer.prompt({
+      name: "repo_name",
+      type: "input",
+      message: "Enter the repository name:",
+    });
+
+    const repoVisibility = await inquirer.prompt({
+      name: "repo_visibility",
+      type: "list",
+      message: "Do you want the repository to be public or private?",
+      choices: ["Public", "Private"],
+    });
+
+    const visibilityFlag =
+      repoVisibility.repo_visibility === "Public" ? "" : "--private";
+    await execute(`gh repo create ${repoName.repo_name} ${visibilityFlag}`);
+  } else {
+    console.log(chalk.blue("Git repository already initialized."));
   }
 
   const file = await inquirer.prompt({
     name: "file_location",
     type: "input",
-    message: "Which file(s) should be committed",
+    message: "Which file(s) should be committed?",
     default() {
       return "src";
     },
@@ -71,7 +93,7 @@ async function createGitCommit() {
   const commitContent = await inquirer.prompt({
     name: "message",
     type: "input",
-    message: `Which a commit message (${commit.message_type})`,
+    message: `Enter a commit message (${commit.message_type}):`,
     default() {
       return "new commit";
     },
@@ -83,11 +105,14 @@ async function createGitCommit() {
 
   const spinner = createSpinner("Processing...").start();
 
-  await sleep;
+  await sleep(1000);
 
   spinner.success({
     text: "✨ Commit created successfully",
   });
+  console.log(
+    `Run ${chalk.cyan("git push")} to push the commits to the remote repository`
+  );
 }
 
-await createGitCommit();
+createGitCommit();
