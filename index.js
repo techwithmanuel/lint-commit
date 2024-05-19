@@ -78,19 +78,23 @@ async function createGitCommit() {
     await execute(`git add ${file.file_location}`);
 
     if (fileChanges && fileName) {
-      const spinner = createSpinner("Generating Commit Message...").start();
+      try {
+        const spinner = createSpinner("Generating Commit Message...").start();
 
-      await sleep(3000);
+        await sleep(3000);
 
-      const AIGeneratedCommitMessage =
-        await generateCommit(`Changes for ${fileName}
+        const AIGeneratedCommitMessage =
+          await generateCommit(`Changes for ${fileName}
     ${fileChanges}`);
 
-      await execute(`git commit -m "${AIGeneratedCommitMessage}}"`);
+        await execute(`git commit -m "${AIGeneratedCommitMessage}}"`);
 
-      spinner.success({
-        text: "✨ Commit created successfully",
-      });
+        spinner.success({
+          text: "✨ Commit created successfully",
+        });
+      } catch (error) {
+        throw new Error(error);
+      }
     }
   } catch (error) {
     console.error(
