@@ -82,8 +82,6 @@ async function createGitCommit() {
 
       await sleep(3000);
 
-      console.log(`Changes for ${fileName}:`);
-
       const AIGeneratedCommitMessage =
         await generateCommit(`Changes for ${fileName}
     ${fileChanges}`);
