@@ -19,11 +19,11 @@ function execute(command) {
         return;
       }
 
-      if (stderr) {
-        console.error(chalk.red(`Error in command output: ${stderr}`));
-        reject(new Error(stderr));
-        return;
-      }
+      // if (stderr) {
+      //   console.error(chalk.red(`Error in command output: ${stderr}`));
+      //   reject(new Error(stderr));
+      //   return;
+      // }
 
       resolve(stdout);
     });
@@ -111,13 +111,13 @@ async function createGitCommit() {
   });
 
   if (pushInit.value === "Yes") {
-    const spinner = createSpinner("Generating Commit Message...").start();
+    const spinner = createSpinner("Syncing...").start();
 
     await sleep(1000);
     await execute("git push");
 
     spinner.success({
-      text: "Pushed successfully",
+      text: "✨ Pushed successfully",
     });
   } else if (pushInit.value === "No") {
     console.log(
