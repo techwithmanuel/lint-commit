@@ -1,17 +1,17 @@
-# TechWithManuel Git Commit Automation CLI
+# Lint Commit
 
-## Description
+### Description
 
 This CLI tool helps automate the process of generating commit messages and managing a Git repository. It guides the user through initializing a Git repository (if not already initialized), selecting files to commit, generating AI-assisted commit messages, and optionally pushing changes to a remote repository.
 
-## Features
+### Features
 
 - Initialize a new Git repository if not already initialized
 - Select files to commit from the list of changed files
 - Generate AI-assisted commit messages using the Google Generative AI API
 - Optionally push changes to the remote repository
 
-## Prerequisites
+### Prerequisites
 
 - Node.js (v14.x or later)
 - Git installed on your system
