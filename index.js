@@ -82,7 +82,7 @@ async function createGitCommit() {
           `Changes for ${fileName}\n${fileChanges}`
         );
 
-        if (!AIGeneratedCommitMessage) {
+        if (!AIGeneratedCommitMessage || AIGeneratedCommitMessage === "") {
           console.log(
             chalk.red("An error occured while generating the commit message")
           );
