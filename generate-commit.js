@@ -12,6 +12,7 @@ export async function generateCommit(input) {
     const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 
     const prompt = `Using the commit lint convention where "
+    
     feat: Commits that introduce new features.
     fix: Commits that fix a bug.
     docs: Commits that add or update documentation.
