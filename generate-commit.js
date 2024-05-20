@@ -11,49 +11,18 @@ export async function generateCommit(input) {
   try {
     const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 
-    const prompt = `Using the commit lint convention where "build:
-    Changes to build system or dependencies (e.g., \`gulp\`, \`npm\`).
-    Example: \`build: update webpack to version 5\`
-    
-    chore:
-    Routine tasks or maintenance (e.g., config changes).
-    Example: \`chore: update dependencies\`
-    
-    ci:
-    Changes to CI configuration or scripts (e.g., \`Travis\`).
-    Example: \`ci: add GitHub Actions workflow\`
-    
-    docs:
-    Documentation changes only.
-    Example: \`docs: update README\`
-    
-    feat:
-    New feature implementation.
-    Example: \`feat: add user authentication\`
-    
-    fix:
-    Bug fixes.
-    Example: \`fix: resolve login issue\`
-    
-    perf:
-    Performance improvements.
-    Example: \`perf: optimize image loading\`
-    
-    refactor:
-    Code changes that do not add features or fix bugs.
-    Example: \`refactor: simplify user service\`
-    
-    revert:
-    Reverts a previous commit.
-    Example: \`revert: undo feature addition\`
-    
-    style:
-    Changes that do not affect logic (e.g., formatting).
-    Example: \`style: fix linting issues\`
-    
-    test:
-    Adding or modifying tests.
-    Example: \`test: add unit tests for login\" , in all lowercase characters, write a commit message in a single sentence for : ${input}`;
+    const prompt = `Using the commit lint convention where "
+    feat: Commits that introduce new features.
+    fix: Commits that fix a bug.
+    docs: Commits that add or update documentation.
+    style: Commits that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc.).
+    refactor: Commits that neither fix a bug nor add a feature (code changes that improve the structure or design).
+    perf: Commits that improve performance.
+    test: Commits that add or update tests.
+    build: Commits that affect the build system or external dependencies (example scopes: gulp, broccoli, npm).
+    ci: Commits that affect continuous integration configuration files and scripts (example scopes: Travis, Circle, BrowserStack, SauceLabs).
+    chore: Commits that update build tasks, package manager configs, and other non-production code changes.
+    " , in all lowercase characters, write a commit message in a single sentence for : ${input}`;
 
     const result = await model.generateContent(prompt);
     const response = await result.response;
