@@ -99,10 +99,16 @@ async function createGitCommit() {
           );
         }
       } catch (error) {
+        await execute("git reset");
         throw new Error(error);
       }
+    } else {
+      await execute("git reset");
+      console.log(chalk.error("Unable to access file changes"));
+      process.exit(1);
     }
   } catch (error) {
+    await execute("git reset");
     console.error(
       chalk.red(`Failed to complete the operation: ${error.message}`)
     );
