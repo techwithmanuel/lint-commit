@@ -1,30 +1,22 @@
 #!/usr/bin/env node
 
 import chalk from "chalk";
-import inquirer from "inquirer";
-import { createSpinner } from "nanospinner";
+import { intro, select, text, confirm, spinner } from "@clack/prompts";
 import { exec } from "child_process";
 import { checkGitStatus } from "./changed-files.js";
 import { gitDiffForFile } from "./file-changes.js";
 import { generateCommit } from "./generate-commit.js";
 
-const sleep = (ms = 1000) => new Promise((r) => setTimeout(r, ms));
+const sleep = (ms = 1000) => new Promise((resolve) => setTimeout(resolve, ms));
 
 function execute(command) {
   return new Promise((resolve, reject) => {
-    exec(command, (error, stdout, stderr) => {
+    exec(command, (error, stdout, _) => {
       if (error) {
         console.error(chalk.red(`Error executing command: ${error.message}`));
         reject(error);
         return;
       }
-
-      // if (stderr) {
-      //   console.error(chalk.red(`Error in command output: ${stderr}`));
-      //   reject(new Error(stderr));
-      //   return;
-      // }
-
       resolve(stdout);
     });
   });
@@ -33,65 +25,67 @@ function execute(command) {
 async function createGitCommit() {
   const files = checkGitStatus();
   try {
-    console.log(chalk.green("✨ Initialized CLI"));
+    intro(chalk.green("✨ Initialized CLI"));
 
-    const initGit = await inquirer.prompt({
-      name: "git_initialized",
-      type: "list",
-      message: "Have you initialized a git repository ?",
-      choices: ["Yes", "No"],
+    const initGit = await select({
+      message: "Have you initialized a git repository?",
+      options: [
+        { label: "Yes", value: "Yes" },
+        { label: "No", value: "No" },
+      ],
     });
 
-    if (initGit.git_initialized === "No") {
+    if (initGit === "No") {
       await execute("git init");
 
-      const repoName = await inquirer.prompt({
-        name: "repo_name",
-        type: "input",
+      const repoName = await text({
         message: "Enter the repository name:",
       });
 
-      const repoVisibility = await inquirer.prompt({
-        name: "repo_visibility",
-        type: "list",
-        message: "Do you want the repository to be public or private ?",
-        choices: ["Public", "Private"],
+      const repoVisibility = await select({
+        message: "Do you want the repository to be public or private?",
+        options: [
+          { label: "Public", value: "Public" },
+          { label: "Private", value: "Private" },
+        ],
       });
 
-      const visibilityFlag =
-        repoVisibility.repo_visibility === "Public" ? "" : "--private";
-      await execute(`gh repo create ${repoName.repo_name} ${visibilityFlag}`);
+      const visibilityFlag = repoVisibility === "Public" ? "" : "--private";
+      await execute(`gh repo create ${repoName} ${visibilityFlag}`);
     } else {
       console.log(chalk.blue("🗂️  Git repository already initialized."));
     }
 
-    const file = await inquirer.prompt({
-      name: "file_location",
-      type: "list",
-      message: "Which file should be committed ?",
-      choices: files,
+    const file = await select({
+      message: "Which file should be committed?",
+      options: files.map((file) => ({ label: file, value: file })),
     });
 
-    const fileChanges = await gitDiffForFile(file.file_location);
-    const fileName = file.file_location;
+    const fileChanges = await gitDiffForFile(file);
+    const fileName = file;
 
-    await execute(`git add ${file.file_location}`);
+    await execute(`git add ${file}`);
 
     if (fileChanges && fileName) {
       try {
-        const spinner = createSpinner("Generating Commit Message...").start();
+        const s = spinner();
+        s.start("Generating Commit Message...");
 
         await sleep(3000);
 
-        const AIGeneratedCommitMessage =
-          await generateCommit(`Changes for ${fileName}
-    ${fileChanges}`);
+        const AIGeneratedCommitMessage = await generateCommit(
+          `Changes for ${fileName}\n${fileChanges}`
+        );
 
-        await execute(`git commit -m "${AIGeneratedCommitMessage}}"`);
+        await execute(`git commit -m "${AIGeneratedCommitMessage}"`);
 
-        spinner.success({
-          text: `✨ Commit "${AIGeneratedCommitMessage}" generated successfully`,
-        });
+        s.stop(
+          chalk.green(
+            `Commit ${chalk.blue(
+              `"${AIGeneratedCommitMessage}"`
+            )} generated successfully`
+          )
+        );
       } catch (error) {
         throw new Error(error);
       }
@@ -103,26 +97,20 @@ async function createGitCommit() {
     process.exit(1);
   }
 
-  const pushInit = await inquirer.prompt({
-    name: "value",
-    type: "list",
-    message: "Would you like to push to your remote repository ?",
-    choices: ["Yes", "No"],
+  const pushInit = await confirm({
+    message: "Would you like to push to your remote repository?",
   });
 
-  if (pushInit.value === "Yes") {
-    const spinner = createSpinner("Syncing...").start();
+  if (pushInit) {
+    const s = spinner();
+    s.start("Syncing...");
 
     await sleep(1000);
     await execute("git push");
 
-    spinner.success({
-      text: "✨ Pushed successfully",
-    });
-  } else if (pushInit.value === "No") {
-    console.log(
-      `😅 No problems, run ${chalk.cyan("git push")} to push to your repository`
-    );
+    s.stop(chalk.green("Pushed successfully"));
+  } else {
+    console.log(`Run ${chalk.cyan("git push")} to push to your repository`);
   }
 }
 
