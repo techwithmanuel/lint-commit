@@ -82,15 +82,22 @@ async function createGitCommit() {
           `Changes for ${fileName}\n${fileChanges}`
         );
 
-        await execute(`git commit -m "${AIGeneratedCommitMessage}"`);
+        if (!AIGeneratedCommitMessage) {
+          console.log(
+            chalk.red("An error occured while generating the commit message")
+          );
+          process.exit(1);
+        } else {
+          await execute(`git commit -m "${AIGeneratedCommitMessage}"`);
 
-        s.stop(
-          chalk.green(
-            `Commit ${chalk.blue(
-              `"${AIGeneratedCommitMessage}"`
-            )} generated successfully`
-          )
-        );
+          s.stop(
+            chalk.green(
+              `Commit ${chalk.blue(
+                `"${AIGeneratedCommitMessage}"`
+              )} generated successfully`
+            )
+          );
+        }
       } catch (error) {
         throw new Error(error);
       }
