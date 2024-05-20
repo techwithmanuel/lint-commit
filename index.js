@@ -56,6 +56,11 @@ async function createGitCommit() {
       console.log(chalk.blue("🗂️  Git repository already initialized."));
     }
 
+    if (files.length < 1) {
+      console.log(chalk.red("There are currently no files to commit"));
+      process.exit(1);
+    }
+
     const file = await select({
       message: "Which file should be committed?",
       options: files.map((file) => ({ label: file, value: file })),
