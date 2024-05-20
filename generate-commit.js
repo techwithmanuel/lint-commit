@@ -2,6 +2,7 @@
 
 import { config } from "dotenv";
 import chalk from "chalk";
+import { exec } from "child_process";
 config();
 
 import { GoogleGenerativeAI } from "@google/generative-ai";
@@ -30,6 +31,7 @@ export async function generateCommit(input) {
     const text = response.text();
     return text;
   } catch (error) {
+    exec("git reset");
     console.log(chalk.red(`${error}`));
     process.exit(1);
   }
