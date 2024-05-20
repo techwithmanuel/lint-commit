@@ -1,6 +1,6 @@
 {
   "name": "lint-commit",
-  "version": "0.0.161",
+  "version": "0.0.162",
   "description": "Basic command line tool for writing commit files with the commitlint convention",
   "main": "index.js",
   "type": "module",
