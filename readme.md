@@ -62,12 +62,6 @@ Contributions are welcome! Please follow these steps to contribute:
 4. Push to the branch (git push origin feature-branch).
 5. Create a new Pull Request.
 
-### Acknowledgements
-
-- [chalk](https://github.com/chalk/chalk) for terminal string styling.
-- [inquirer](https://github.com/SBoudrias/Inquirer.js) for interactive prompts.
-- [nanospinner](https://github.com/usmanyunusov/nanospinner) for CLI spinners.
-
 ### Contact
 
 For any questions or suggestions, please open an issue.
