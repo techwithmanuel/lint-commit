@@ -22,6 +22,8 @@ function execute(command) {
   });
 }
 
+//Create git commit function
+
 async function createGitCommit() {
   const files = checkGitStatus();
   try {
