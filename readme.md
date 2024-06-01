@@ -18,7 +18,6 @@ This CLI tool helps automate the process of generating commit messages and manag
 - GitHub CLI (`gh`) installed
 - Google Generative AI API key : [Google AI Studio](https://ai.google.dev/aistudio)
 
-
 ## Installation
 
 #### 1. Install lint-commit globally:
@@ -43,6 +42,22 @@ node register.js
 node index.js
 ```
 
+## How to get your Gemini API Key
+
+#### 1. Sign in to [Google AI Studio](https://aistudio.google.com/app/prompts/new_chat?pli=1)
+
+#### 2. Select `Get API key` on the side menu
+
+#### 3. Select `Create API key` then follow the prompt to create the key
+
+#### 4. Once done, copy the key, run this command after installing lint-commit
+
+```
+lint-commit register
+```
+
+#### Then enter the key
+
 ## Usage
 
 Once you've installed and resgitered your `GEMINI_API_KEY`, To get started with lint-commit, simply run:
@@ -52,22 +67,6 @@ lint-commit
 ```
 
 Follow the prompts to initialize a git repository, add files, and create a commit with a commitlint-conformant message.
-
-## How to get your `GEMINI_API_KEY`
-
-#### 1. Sign in to [Google AI Studio](https://aistudio.google.com/app/prompts/new_chat?pli=1)
-
-#### 2. Select `Get API key` on the side menu
-
-#### 3. Select `Create API key` then follow the prompt to create the key
-
-### 4. Once done, copy the key, run this command after installing lint-commit
-
-```
-lint-commit register
-```
-
-Then enter the key
 
 ## Contributing
 
