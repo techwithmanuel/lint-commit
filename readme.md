@@ -16,21 +16,21 @@ This CLI tool helps automate the process of generating commit messages and manag
 - Node.js (v14.x or later)
 - Git installed on your system
 - GitHub CLI (`gh`) installed
-- Google Generative AI API key
+- Google Generative AI API key : [Google AI Studio](https://ai.google.dev/aistudio)
+
 
 ## Installation
 
-#### 1. Set up environment variables:
-   Create a `.env` file in the root directory and add your Google Generative AI API key:
+#### 1. Install lint-commit globally:
 
 ```bash
-GEMINI_API_KEY=your_gemini_api_key
+npm install -g lint-commit
 ```
 
-#### 2. You can use this tool without installation via `npx`:
+#### 2. Register your GEMINI_API_KEY:
 
 ```bash
-npx lint-commit
+lint-commit register
 ```
 
 #### 3. Alternatively, you can clone this repository and run the script locally:
@@ -39,20 +39,37 @@ npx lint-commit
 git clone https://github.com/techwithmanuel/lint-commit.git
 cd lint-commit
 npm install
+node register.js
 node index.js
 ```
 
-### Usage
+## Usage
 
-To get started with lint-commit, simply run:
+Once you've installed and resgitered your `GEMINI_API_KEY`, To get started with lint-commit, simply run:
 
 ```bash
-npx lint-commit
+lint-commit
 ```
 
 Follow the prompts to initialize a git repository, add files, and create a commit with a commitlint-conformant message.
 
-### Contributing
+## How to get your `GEMINI_API_KEY`
+
+#### 1. Sign in to [Google AI Studio](https://aistudio.google.com/app/prompts/new_chat?pli=1)
+
+#### 2. Select `Get API key` on the side menu
+
+#### 3. Select `Create API key` then follow the prompt to create the key
+
+### 4. Once done, copy the key, run this command after installing lint-commit
+
+```
+lint-commit register
+```
+
+Then enter the key
+
+## Contributing
 
 Contributions are welcome! Please follow these steps to contribute:
 
@@ -62,6 +79,6 @@ Contributions are welcome! Please follow these steps to contribute:
 4. Push to the branch (git push origin feature-branch).
 5. Create a new Pull Request.
 
-### Contact
+## Contact
 
 For any questions or suggestions, please open an issue.
