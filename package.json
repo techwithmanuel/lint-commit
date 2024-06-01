@@ -5,9 +5,12 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "register": "node register.js"
   },
-  "bin": "./index.js",
+  "bin": {
+    "lint-commit": "./index.js"
+  },
   "keywords": [
     "cli",
     "command",
