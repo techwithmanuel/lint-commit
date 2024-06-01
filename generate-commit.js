@@ -1,12 +1,11 @@
 #!/usr/bin/env node
 
-import { config } from "dotenv";
 import chalk from "chalk";
 import { exec } from "child_process";
-config();
-
 import { GoogleGenerativeAI } from "@google/generative-ai";
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+import { getApiKey } from "./store-api-key.js";
+
+const genAI = new GoogleGenerativeAI(getApiKey());
 
 export async function generateCommit(input) {
   try {
