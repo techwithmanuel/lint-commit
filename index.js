@@ -106,7 +106,7 @@ async function createGitCommit() {
       }
     } else {
       await execute("git reset");
-      console.log(chalk.error("Unable to access file changes"));
+      console.log(chalk.red("Unable to access file changes"));
       process.exit(1);
     }
   } catch (error) {
