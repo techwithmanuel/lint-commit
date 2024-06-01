@@ -1,7 +1,14 @@
 #!/usr/bin/env node
 
 import chalk from "chalk";
-import { intro, select, text, confirm, spinner } from "@clack/prompts";
+import {
+  intro,
+  multiselect,
+  select,
+  text,
+  confirm,
+  spinner,
+} from "@clack/prompts";
 import { exec } from "child_process";
 import { checkGitStatus } from "./changed-files.js";
 import { gitDiffForFile } from "./file-changes.js";
@@ -22,10 +29,8 @@ function execute(command) {
   });
 }
 
-//Create git commit function
-
 async function createGitCommit() {
-  const files = checkGitStatus();
+  const files = await checkGitStatus();
   try {
     intro(chalk.green("✨ Initialized CLI"));
 
@@ -63,58 +68,57 @@ async function createGitCommit() {
       process.exit(1);
     }
 
-    const file = await select({
-      message: "Which file should be committed?",
+    const selectedFiles = await multiselect({
+      message: "Which files should be committed?",
       options: files.map((file) => ({ label: file, value: file })),
     });
 
-    const fileChanges = await gitDiffForFile(file);
-    const fileName = file;
+    for (const file of selectedFiles) {
+      await execute(`git add ${file}`);
 
-    await execute(`git add ${file}`);
+      const fileChanges = await gitDiffForFile(file);
 
-    if (fileChanges && fileName) {
+      if (!fileChanges) {
+        console.log(chalk.red(`Unable to access file changes for ${file}`));
+        exec("git reset");
+        process.exit(1);
+      }
+
       try {
         const s = spinner();
-        s.start("Generating Commit Message...");
+        s.start(`Generating Commit Message for ${file}...`);
 
         await sleep(3000);
 
         const AIGeneratedCommitMessage = await generateCommit(
-          `Changes for ${fileName}\n${fileChanges}`
+          `Changes for ${file}\n${fileChanges}`
         );
 
         if (!AIGeneratedCommitMessage || AIGeneratedCommitMessage === "") {
           console.log(
-            chalk.red("An error occured while generating the commit message")
+            chalk.red(
+              `An error occurred while generating the commit message for ${file}`
+            )
           );
-          process.exit(1);
+          s.stop();
         } else {
           await execute(`git commit -m "${AIGeneratedCommitMessage}"`);
-
           s.stop(
             chalk.green(
               `Commit ${chalk.blue(
                 `"${AIGeneratedCommitMessage}"`
-              )} generated successfully`
+              )} generated successfully for ${file}`
             )
           );
         }
       } catch (error) {
-        await execute("git reset");
-        throw new Error(error);
+        console.log(chalk.red(`Failed to commit ${file}: ${error.message}`));
       }
-    } else {
-      await execute("git reset");
-      console.log(chalk.red("Unable to access file changes"));
-      process.exit(1);
     }
   } catch (error) {
-    await execute("git reset");
     console.error(
       chalk.red(`Failed to complete the operation: ${error.message}`)
     );
-    process.exit(1);
   }
 
   const pushInit = await confirm({
